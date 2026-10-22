@@ -54,9 +54,16 @@ jobs:
           export PYTHONPATH="${PYTHONPATH}:${GITHUB_WORKSPACE}"
           pytest tests/uni_agent/ -m="cpu and level0" --suppress-no-test-exit-code --cov=./uni_agent/ --cov-report=xml --cov-report=term
 
-      - name: Upload CPU coverage
-        uses: codecov/codecov-action@v4
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
-          flags: cpu-tests
+          name: coverage-report
+          path: coverage.xml
+          retention-days: 1
+
+#      - name: Upload CPU coverage
+#        uses: codecov/codecov-action@v4
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+#          file: ./coverage.xml
+#          flags: cpu-tests
