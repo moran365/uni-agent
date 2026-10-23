@@ -1,0 +1,29 @@
+name: Upload Coverage to Codecov
+
+on:
+  workflow_run:
+    workflows: "tests-cpu"  # 必须与第一阶段 name 完全一致
+    types: [completed]
+
+permissions:
+  actions: read      # 下载 artifact 需要
+  contents: read
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+#    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: cpu-tests
