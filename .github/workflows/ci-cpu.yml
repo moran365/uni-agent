@@ -13,8 +13,14 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
+  #  detect changes file
+  changes:
+    uses: ./.github/workflows/detect-changes.yml
+
   # ============ Job: test in cpu ============
   test-cpu:
+    needs: changes
+    if: needs.changes.outputs.cpu == 'true' || needs.changes.outputs.run_all == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
 

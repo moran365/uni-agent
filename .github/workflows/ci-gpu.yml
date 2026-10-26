@@ -17,8 +17,14 @@ env:
   DYNAMIC_RUNNER_ENDPOINT: "https://sh6mtrbg8demerkmc1uhk.apigateway-cn-beijing.volceapi.com/runner/create/runner"
 
 jobs:
+  #  detect changes file
+  changes:
+    uses: ./.github/workflows/detect-changes.yml
+
   # ============ Job: test in gpu ============
   setup:
+    needs: changes
+    if: needs.changes.outputs.gpu == 'true' || needs.changes.outputs.run_all == 'true'
     runs-on: ubuntu-latest
     outputs:
       runner-label: ${{ steps.create-runner.outputs.runner-label }}

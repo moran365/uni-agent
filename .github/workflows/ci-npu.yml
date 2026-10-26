@@ -12,7 +12,14 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
+  #  detect changes file
+  changes:
+    uses: ./.github/workflows/detect-changes.yml
+
+  # ============ Job: test in npu ============
   test-npu:
+    needs: changes
+    if: needs.changes.outputs.npu == 'true' || needs.changes.outputs.run_all == 'true'
     runs-on: linux-aarch64-a2-8
     container:
       image: ascendai/cann:latest
