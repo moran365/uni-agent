@@ -62,8 +62,46 @@ Ensure that the test cases run without errors before merging.
 
 **Currently, this verification is only a recommendation and is not set as a mandatory check**
 
-After the Python Backend CI workflow finishes running, a coverage comment will be added to the PR, showing the coverage of the code corresponding to the changes in this PR.
+After CI workflow finishes running, a coverage comment will be added to the PR, showing the coverage of the code corresponding to the changes in this PR.
 
 This includes: `coverage of the modified code` and `coverage details displayed by code line`.
 
 It is recommended to improve the test case coverage based on the results.
+
+## 4. Configure Precise Trigger Rules
+
+### 1. Mechanism Description
+
+This mechanism establishes a mapping between project files and backend-specific test cases. After a file is modified, only the test cases for the corresponding backend will be triggered.
+
+Triggering principles:
+
+- For files that are configured with a corresponding backend, only that backend's tests are triggered when they change.
+- For files that are not configured for any backend, tests for all backends are triggered.
+
+### 2. Configuration Method
+
+Edit the configuration file: [filter-paths.yml](uni_agent/filter-paths.yml)
+
+Update the file paths under the corresponding backend:
+
+```
+cpu:
+  - 'relative path of files that run on the CPU backend'
+gpu:
+  - 'relative path of files that run on the GPU backend'
+npu:
+  - 'relative path of files that run on the NPU backend'
+run_all:
+  - '!relative path of files that run on the CPU backend'
+  - '!relative path of files that run on the GPU backend'
+  - '!relative path of files that run on the NPU backend'
+```
+
+- `cpu`/`gpu`/`npu`: code paths that trigger only the corresponding backend tests
+- `run_all`: code paths that trigger tests for all backends, usually set by excluding the paths configured under cpu/gpu/npu
+
+When editing, update two places:
+
+- The code paths configured under the corresponding backend.
+- The excluded paths configured in `run_all`, using `!` to exclude those paths.
