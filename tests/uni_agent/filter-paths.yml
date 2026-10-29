@@ -18,5 +18,7 @@ run_all:
   - '!.github/workflows/ci-gpu.yml'
   - '!.github/workflows/ci-npu.yml'
   - '!.github/workflows/upload_npu_assister.yml'
+  - '!tests/Case_Submission_Guide_CN.md'
+  - '!tests/Case_Submission_Guide_EN.md'
   - '!examples/agent_aware_router/multi-node.sh'
   - '!examples/agent_aware_router/single-node.sh'
