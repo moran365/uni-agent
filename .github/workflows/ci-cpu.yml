@@ -79,4 +79,4 @@ jobs:
             echo "CPU CI FAILED"
             exit 1
           fi
-          echo "CPU CI SUCCESS"
+          echo "CPU CI SUCCESS TEST"
