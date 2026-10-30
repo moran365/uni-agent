@@ -18,10 +18,27 @@ jobs:
       cpu: ${{ steps.filter.outputs.cpu }}
       gpu: ${{ steps.filter.outputs.gpu }}
       npu: ${{ steps.filter.outputs.npu }}
-      run_all: ${{ steps.filter.outputs.run_all }}
+      run_all: ${{ steps.decision.outputs.run_all }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
         id: filter
         with:
           filters: tests/uni_agent/filter-paths.yml
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute run_all
+        id: decision
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+          RUN_ALL=false
+          for f in $CHANGED; do
+            case "$f" in 
+              'examples/agent_aware_router/single-node.sh'|'tests/Case_Submission_Guide_CN.md') ;;
+              *) RUN_ALL=true; break ;;
+            esac
+          done
+          echo "run_all=$RUN_ALL" >> "$GITHUB_OUTPUT"
