@@ -19,7 +19,7 @@ jobs:
   # ============ Job: test in npu ============
   run:
     needs: changes
-    if: needs.changes.outputs.npu == 'true' || needs.changes.outputs.run_all == 'true'
+    if: needs.changes.outputs.npu == 'true'
     runs-on: linux-aarch64-a2-8
     container:
       image: ascendai/cann:latest

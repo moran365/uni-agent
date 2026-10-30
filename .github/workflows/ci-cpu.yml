@@ -20,7 +20,7 @@ jobs:
   # ============ Job: test in cpu ============
   run:
     needs: changes
-    if: needs.changes.outputs.cpu == 'true' || needs.changes.outputs.run_all == 'true'
+    if: needs.changes.outputs.cpu == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
 

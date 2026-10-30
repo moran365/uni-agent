@@ -24,7 +24,7 @@ jobs:
   # ============ Job: test in gpu ============
   setup:
     needs: changes
-    if: needs.changes.outputs.gpu == 'true' || needs.changes.outputs.run_all == 'true'
+    if: needs.changes.outputs.gpu == 'true'
     runs-on: ubuntu-latest
     outputs:
       runner-label: ${{ steps.create-runner.outputs.runner-label }}
